@@ -13,6 +13,8 @@ from sklearn.model_selection import train_test_split
 from skimage import data,color
 from skimage.transform import rescale,resize,downscale_local_mean
 
+import numpy as np
+
 
 # Instructions from Class
 # #PART: setting up hyperparameter
@@ -35,16 +37,37 @@ _, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
 for ax, image, label in zip(axes, digits.images, digits.target):
     ax.set_axis_off()
     print("The resolution of the image is ",image.shape)
-    image=resize(image,(4,4))
-    print("The resolution of the image is ",image.shape)
+    # image=resize(image,(4,4))
+    # print("The resolution of the image is ",image.shape)
     ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
     ax.set_title("Training: %i" % label)
 
 
 # PART: data pre-processing -- to remove some noise, to normalize data, format the data to be consumed by mode
 # flatten the images
+images = []
+for image in digits.images:
+  image=resize(image,(32,32))
+  images.append(image)
+
+# try:
+digits.images = np.asarray(images)
+# except Exception as e:
+#   pass
+
+for ax, image, label in zip(axes, digits.images, digits.target):
+    ax.set_axis_off()
+    print("The resolution of the image is ",image.shape)
+    # image=resize(image,(4,4))
+    # print("The resolution of the image is ",image.shape)
+    ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
+    ax.set_title("Training: %i" % label)
+
+
 n_samples = len(digits.images)
 data = digits.images.reshape((n_samples, -1))
+
+print(type(data))
 
 # PART: define train/dev/test splits of experiment protocol
 # train to train model
@@ -108,10 +131,10 @@ print("Best Accuracy Value:" + str(cur_acc))
 predicted = best_model.predict(X_test)
 
 # PART: Sanity check of predictions
-_, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
-for ax, image, prediction in zip(axes, X_test, predicted):
-    ax.set_axis_off()
-    image = image.reshape(8, 8)
-    ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
-    ax.set_title(f"Prediction: {prediction}")
+# _, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
+# for ax, image, prediction in zip(axes, X_test, predicted):
+#     ax.set_axis_off()
+#     # image = image.reshape(8, 8)
+#     ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
+#     ax.set_title(f"Prediction: {prediction}")
 
