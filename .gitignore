@@ -29,6 +29,7 @@ var/
 
 # python virtual environment/compiled files
 venv/
+newv/
 *.pyc
 
 # PyInstaller
