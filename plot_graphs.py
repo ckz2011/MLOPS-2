@@ -83,12 +83,20 @@ for i in gamma_list:
 
       cur_acc = metrics.accuracy_score(y_pred=predicted_in_loop, y_true=y_dev)
 
+      # PART: Compute evaluation metrics
+      print(
+          f"Classification report for classifier {clf}:\n"
+          f"{metrics.classification_report(y_pred=predicted_in_loop, y_true=y_dev)}\n"
+        )
+
       if cur_acc > best_acc:
-        best_acc = cur_acc
-        best_model = clf
-        best_h_params = hyper_params
-        print("Best Accuracy :"+str(hyper_params))
-        print("Best Accuracy Value:" + str(cur_acc))
+          best_acc = cur_acc
+          best_model = clf
+          best_h_params = hyper_params
+
+print("Best Accuracy :"+str(hyper_params))
+
+print("Best Accuracy Value:" + str(cur_acc))
 
 
 predicted = best_model.predict(X_test)
@@ -101,8 +109,3 @@ for ax, image, prediction in zip(axes, X_test, predicted):
     ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
     ax.set_title(f"Prediction: {prediction}")
 
-# PART: Compute evaluation metrics
-print(
-    f"Classification report for classifier {clf}:\n"
-    f"{metrics.classification_report(y_test, predicted)}\n"
-)
