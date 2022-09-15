@@ -10,6 +10,9 @@ import matplotlib.pyplot as plt
 # Import datasets, classifiers and performance metrics
 from sklearn import datasets, svm, metrics
 from sklearn.model_selection import train_test_split
+from skimage import data,color
+from skimage.transform import rescale,resize,downscale_local_mean
+
 
 # Instructions from Class
 # #PART: setting up hyperparameter
@@ -31,14 +34,17 @@ digits = datasets.load_digits()
 _, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
 for ax, image, label in zip(axes, digits.images, digits.target):
     ax.set_axis_off()
+    print("The resolution of the image is ",image.shape)
+    image=resize(image,(4,4))
+    print("The resolution of the image is ",image.shape)
     ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
     ax.set_title("Training: %i" % label)
+
 
 # PART: data pre-processing -- to remove some noise, to normalize data, format the data to be consumed by mode
 # flatten the images
 n_samples = len(digits.images)
 data = digits.images.reshape((n_samples, -1))
-
 
 # PART: define train/dev/test splits of experiment protocol
 # train to train model
