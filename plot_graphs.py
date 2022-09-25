@@ -94,6 +94,8 @@ best_acc = -1.0
 best_model = None
 best_h_params = None
 
+cur_acc_array = []
+
 for i in gamma_list:
     for j in c_list:
       clf = svm.SVC()
@@ -111,6 +113,7 @@ for i in gamma_list:
       predicted_in_loop = clf.predict(X_dev)
 
       cur_acc = metrics.accuracy_score(y_pred=predicted_in_loop, y_true=y_dev)
+      cur_acc_array.append(cur_acc)
 
       # PART: Compute evaluation metrics
       print(
@@ -122,6 +125,14 @@ for i in gamma_list:
           best_acc = cur_acc
           best_model = clf
           best_h_params = hyper_params
+
+print("All Current Accuracy Values : " + cur_acc_array)
+
+print("Mean of Current Accuracy  " + np.mean(cur_acc_array))
+
+print("Mediam of Current Accuracy  " + np.median(cur_acc_array))
+
+print("Mode of Current Accuracy  " + np.mode(cur_acc_array))
 
 print("Best Accuracy :"+str(hyper_params))
 
