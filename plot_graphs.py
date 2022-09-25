@@ -4,6 +4,8 @@
 
 # PART: library dependencies -- sklear, torch, tensorflow, numpy, transformers
 
+from tabulate import tabulate
+
 # Standard scientific Python imports
 import matplotlib.pyplot as plt
 
@@ -25,9 +27,9 @@ import numpy as np
 # C = 0.5
 
 
-train_frac = 0.8
-test_frac = 0.1
-dev_frac = 0.1
+train_frac = 0.6
+test_frac = 0.2
+dev_frac = 0.2
 
 # PART: load dataset -- data from csv, tsv, jsonl, pickle
 digits = datasets.load_digits()
@@ -81,6 +83,13 @@ X_test, X_dev, y_test, y_dev = train_test_split(
     X_dev_test, y_dev_test, test_size=(dev_frac)/dev_test_frac, shuffle=True
 )
 
+print("Hai")
+print(type(X_dev))
+
+# print(tabulate([X_train, X_dev_test, y_train, y_dev_test]))
+
+print("Bye")
+
 # PART: Define the model
 # Create a classifier: a support vector classifier
 
@@ -115,6 +124,10 @@ for i in gamma_list:
       cur_acc = metrics.accuracy_score(y_pred=predicted_in_loop, y_true=y_dev)
       cur_acc_array.append(cur_acc)
 
+      # cur_acc_y_dev = metrics.accuracy_score(y_pred=predicted_in_loop, y_true=y_test)
+
+      
+
       # PART: Compute evaluation metrics
       print(
           f"Classification report for classifier {clf}:\n"
@@ -126,13 +139,23 @@ for i in gamma_list:
           best_model = clf
           best_h_params = hyper_params
 
-print("All Current Accuracy Values : " + cur_acc_array)
+      # train_acc = clf.evaluate(trainX, trainy, verbose=0)
+      # _, test_acc = clf.evaluate(testX, testy, verbose=0)
 
-print("Mean of Current Accuracy  " + np.mean(cur_acc_array))
+# Printing Current Accurracy for All the Loops
 
-print("Mediam of Current Accuracy  " + np.median(cur_acc_array))
+# print(tabulate(cur_acc_array))
 
-print("Mode of Current Accuracy  " + np.mode(cur_acc_array))
+for cur_acc_stored in cur_acc_array:
+    print(cur_acc_stored)
+
+print("Mean of Current Accuracy  " + str(np.mean(cur_acc_array)))
+
+print("Mediam of Current Accuracy  " + str(np.median(cur_acc_array)))
+
+print("Min of Current Accuracy  " + str(np.min(cur_acc_array)))
+
+print("Max of Current Accuracy  " + str(np.max(cur_acc_array)))
 
 print("Best Accuracy :"+str(hyper_params))
 
