@@ -4,6 +4,8 @@
 
 # PART: library dependencies -- sklear, torch, tensorflow, numpy, transformers
 
+from tabulate import tabulate
+
 # Standard scientific Python imports
 import matplotlib.pyplot as plt
 
@@ -25,9 +27,9 @@ import numpy as np
 # C = 0.5
 
 
-train_frac = 0.8
-test_frac = 0.1
-dev_frac = 0.1
+train_frac = 0.6
+test_frac = 0.2
+dev_frac = 0.2
 
 # PART: load dataset -- data from csv, tsv, jsonl, pickle
 digits = datasets.load_digits()
@@ -81,6 +83,13 @@ X_test, X_dev, y_test, y_dev = train_test_split(
     X_dev_test, y_dev_test, test_size=(dev_frac)/dev_test_frac, shuffle=True
 )
 
+print("Hai")
+print(type(X_dev))
+
+# print(tabulate([X_train, X_dev_test, y_train, y_dev_test]))
+
+print("Bye")
+
 # PART: Define the model
 # Create a classifier: a support vector classifier
 
@@ -93,6 +102,8 @@ c_list = [0.1, 0.4, 0.6, 1, 2, 4, 9, 10, 12]
 best_acc = -1.0
 best_model = None
 best_h_params = None
+
+cur_acc_array = []
 
 for i in gamma_list:
     for j in c_list:
@@ -111,6 +122,11 @@ for i in gamma_list:
       predicted_in_loop = clf.predict(X_dev)
 
       cur_acc = metrics.accuracy_score(y_pred=predicted_in_loop, y_true=y_dev)
+      cur_acc_array.append(cur_acc)
+
+      # cur_acc_y_dev = metrics.accuracy_score(y_pred=predicted_in_loop, y_true=y_test)
+
+      
 
       # PART: Compute evaluation metrics
       print(
@@ -122,6 +138,24 @@ for i in gamma_list:
           best_acc = cur_acc
           best_model = clf
           best_h_params = hyper_params
+
+      # train_acc = clf.evaluate(trainX, trainy, verbose=0)
+      # _, test_acc = clf.evaluate(testX, testy, verbose=0)
+
+# Printing Current Accurracy for All the Loops
+
+# print(tabulate(cur_acc_array))
+
+for cur_acc_stored in cur_acc_array:
+    print(cur_acc_stored)
+
+print("Mean of Current Accuracy  " + str(np.mean(cur_acc_array)))
+
+print("Mediam of Current Accuracy  " + str(np.median(cur_acc_array)))
+
+print("Min of Current Accuracy  " + str(np.min(cur_acc_array)))
+
+print("Max of Current Accuracy  " + str(np.max(cur_acc_array)))
 
 print("Best Accuracy :"+str(hyper_params))
 
