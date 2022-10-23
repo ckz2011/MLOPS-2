@@ -4,171 +4,71 @@
 
 # PART: library dependencies -- sklear, torch, tensorflow, numpy, transformers
 
-from tabulate import tabulate
-
-# Standard scientific Python imports
-import matplotlib.pyplot as plt
-
 # Import datasets, classifiers and performance metrics
 from sklearn import datasets, svm, metrics
-from sklearn.model_selection import train_test_split
-from skimage import data,color
-from skimage.transform import rescale,resize,downscale_local_mean
+import pdb
 
-import numpy as np
+from utils import (
+    preprocess_digits,
+    train_dev_test_split,
+    h_param_tuning,
+    data_viz,
+    pred_image_viz,
+    get_all_h_param_comb,
+    tune_and_save,
+)
+from joblib import dump, load
 
+train_frac, dev_frac, test_frac = 0.8, 0.1, 0.1
+assert train_frac + dev_frac + test_frac == 1.0
 
-# Instructions from Class
-# #PART: setting up hyperparameter
-# hyper_params = {'gamma':GAMMA, 'C':C}
-# clf.set_params(**hyper_params)
-# # model hyperparams
-# GAMMA = 0.001
-# C = 0.5
+# 1. set the ranges of hyper parameters
+gamma_list = [0.01, 0.005, 0.001, 0.0005, 0.0001]
+c_list = [0.1, 0.2, 0.5, 0.7, 1, 2, 5, 7, 10]
 
+params = {}
+params["gamma"] = gamma_list
+params["C"] = c_list
 
-train_frac = 0.6
-test_frac = 0.2
-dev_frac = 0.2
+h_param_comb = get_all_h_param_comb(params)
+
 
 # PART: load dataset -- data from csv, tsv, jsonl, pickle
 digits = datasets.load_digits()
-
-# PART: sanity check visualization of the data
-_, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
-for ax, image, label in zip(axes, digits.images, digits.target):
-    ax.set_axis_off()
-    print("The resolution of the image is ",image.shape)
-    # image=resize(image,(4,4))
-    # print("The resolution of the image is ",image.shape)
-    ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
-    ax.set_title("Training: %i" % label)
+data_viz(digits)
+data, label = preprocess_digits(digits)
+# housekeeping
+del digits
 
 
-# PART: data pre-processing -- to remove some noise, to normalize data, format the data to be consumed by mode
-# flatten the images
-images = []
-for image in digits.images:
-  image=resize(image,(32,32))
-  images.append(image)
-
-# try:
-digits.images = np.asarray(images)
-# except Exception as e:
-#   pass
-
-for ax, image, label in zip(axes, digits.images, digits.target):
-    ax.set_axis_off()
-    print("The resolution of the image is ",image.shape)
-    # image=resize(image,(4,4))
-    # print("The resolution of the image is ",image.shape)
-    ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
-    ax.set_title("Training: %i" % label)
-
-
-n_samples = len(digits.images)
-data = digits.images.reshape((n_samples, -1))
-
-print(type(data))
-
-# PART: define train/dev/test splits of experiment protocol
-# train to train model
-# dev to set hyperparameters of the model
-# test to evaluate the performance of the model
-dev_test_frac = 1-train_frac
-X_train, X_dev_test, y_train, y_dev_test = train_test_split(
-    data, digits.target, test_size=dev_test_frac, shuffle=True
+x_train, y_train, x_dev, y_dev, x_test, y_test = train_dev_test_split(
+    data, label, train_frac, dev_frac
 )
-X_test, X_dev, y_test, y_dev = train_test_split(
-    X_dev_test, y_dev_test, test_size=(dev_frac)/dev_test_frac, shuffle=True
-)
-
-print("Hai")
-print(type(X_dev))
-
-# print(tabulate([X_train, X_dev_test, y_train, y_dev_test]))
-
-print("Bye")
 
 # PART: Define the model
 # Create a classifier: a support vector classifier
+clf = svm.SVC()
+# define the evaluation metric
+metric = metrics.accuracy_score
 
 
-# 1. Set the ranges of Hyder parameter
-gamma_list = [0.02, 0.007, 0.003, 0.0004, 0.0002]
-c_list = [0.1, 0.4, 0.6, 1, 2, 4, 9, 10, 12] 
+actual_model_path = tune_and_save(
+    clf, x_train, y_train, x_dev, y_dev, metric, h_param_comb, model_path=None
+)
 
 
-best_acc = -1.0
-best_model = None
-best_h_params = None
+# 2. load the best_model
+best_model = load(actual_model_path)
 
-cur_acc_array = []
+# PART: Get test set predictions
+# Predict the value of the digit on the test subset
+predicted = best_model.predict(x_test)
 
-for i in gamma_list:
-    for j in c_list:
-      clf = svm.SVC()
+pred_image_viz(x_test, predicted)
 
-      # PART: setting up hyperparameter
-      hyper_params = {'gamma': i, 'C' : j}
-      clf.set_params(**hyper_params)
-
-      # PART: Train model
-      # Learn the digits on the train subset
-      clf.fit(X_train, y_train)
-
-      # PART: Get test set predictions
-      # Predict the value of the digit on the test subset
-      predicted_in_loop = clf.predict(X_dev)
-
-      cur_acc = metrics.accuracy_score(y_pred=predicted_in_loop, y_true=y_dev)
-      cur_acc_array.append(cur_acc)
-
-      # cur_acc_y_dev = metrics.accuracy_score(y_pred=predicted_in_loop, y_true=y_test)
-
-      
-
-      # PART: Compute evaluation metrics
-      print(
-          f"Classification report for classifier {clf}:\n"
-          f"{metrics.classification_report(y_pred=predicted_in_loop, y_true=y_dev)}\n"
-        )
-
-      if cur_acc > best_acc:
-          best_acc = cur_acc
-          best_model = clf
-          best_h_params = hyper_params
-
-      # train_acc = clf.evaluate(trainX, trainy, verbose=0)
-      # _, test_acc = clf.evaluate(testX, testy, verbose=0)
-
-# Printing Current Accurracy for All the Loops
-
-# print(tabulate(cur_acc_array))
-
-for cur_acc_stored in cur_acc_array:
-    print(cur_acc_stored)
-
-print("Mean of Current Accuracy  " + str(np.mean(cur_acc_array)))
-
-print("Mediam of Current Accuracy  " + str(np.median(cur_acc_array)))
-
-print("Min of Current Accuracy  " + str(np.min(cur_acc_array)))
-
-print("Max of Current Accuracy  " + str(np.max(cur_acc_array)))
-
-print("Best Accuracy :"+str(hyper_params))
-
-print("Best Accuracy Value:" + str(cur_acc))
-
-
-predicted = best_model.predict(X_test)
-
-# PART: Sanity check of predictions
-# _, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
-# for ax, image, prediction in zip(axes, X_test, predicted):
-#     ax.set_axis_off()
-#     # image = image.reshape(8, 8)
-#     ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
-#     ax.set_title(f"Prediction: {prediction}")
-
+# 4. report the test set accurancy with that best model.
+# PART: Compute evaluation metrics
+print(
+    f"Classification report for classifier {clf}:\n"
+    f"{metrics.classification_report(y_test, predicted)}\n"
+)
