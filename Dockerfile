@@ -1,18 +1,14 @@
-FROM python:2-alpine
+# syntax=docker/dockerfile:1
 
-COPY ./requirements.txt /app/requirements.txt
+FROM python:3.8-slim-buster
 
-WORKDIR /app
+WORKDIR /python-docker
 
-RUN apk --update add python py-pip openssl ca-certificates py-openssl wget bash linux-headers
-RUN apk --update add --virtual build-dependencies libffi-dev openssl-dev python-dev py-pip build-base \
-  && pip install --upgrade pip \
-  && pip install --upgrade pipenv\
-  && pip install --upgrade -r /app/requirements.txt\
-  && apk del build-dependencies
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
 
-COPY . /app
+COPY . .
 
-ENTRYPOINT [ "python" ]
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
 
-CMD [ "hello.py" ]
+EXPOSE 5000
