@@ -23,8 +23,8 @@ train_frac, dev_frac, test_frac = 0.8, 0.1, 0.1
 assert train_frac + dev_frac + test_frac == 1.0
 
 # 1. set the ranges of hyper parameters
-gamma_list = [0.01, 0.005, 0.001, 0.0005, 0.0001]
-c_list = [0.1, 0.2, 0.5, 0.7, 1, 2, 5, 7, 10]
+gamma_list = [0.02, 0.004, 0.002, 0.0004, 0.0002]
+c_list = [0.2, 0.3, 0.4, 0.8, 5, 1, 4, 10, 9]
 
 params = {}
 params["gamma"] = gamma_list
