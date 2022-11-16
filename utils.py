@@ -142,5 +142,35 @@ def tune_and_save(
     return model_path
 
 
+def tune_and_save(
+    clf, x_train, y_train, x_dev, y_dev, metric, h_param_comb, model_path
+):
+    best_model, best_metric, best_h_params = h_param_tuning(
+        h_param_comb, clf, x_train, y_train, x_dev, y_dev, metric
+    )
+
+    # save the best_model
+    best_param_config = "_".join(
+        [h + "=" + str(best_h_params[h]) for h in best_h_params]
+    )
+
+    if type(clf) == svm.SVC:
+        model_type = "svm"
+
+    if type(clf) == tree.DecisionTreeClassifier:
+        model_type = "decision_tree"
+
+    best_model_name = model_type + "_" + best_param_config + ".joblib"
+    if model_path == None:
+        model_path = best_model_name
+    dump(best_model, model_path)
+
+    print("Best hyperparameters were:" + str(best_h_params))
+
+    print("Best Metric on Dev was:{}".format(best_metric))
+
+    return model_path
+
+
 def macro_f1(y_true, y_pred, pos_label=1):
     return f1_score(y_true, y_pred, pos_label=pos_label, average='macro', zero_division='warn')
