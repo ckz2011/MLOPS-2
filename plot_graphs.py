@@ -7,6 +7,7 @@
 # Import datasets, classifiers and performance metrics
 from sklearn import datasets, svm, metrics,tree
 import pdb
+import matplotlib
 import statistics
 
 from utils import (
