@@ -11,6 +11,6 @@ def test_sum():
     assert z == expected_z
 
 def test_equal():
-    assert 1==1
+    assert 1==2
 
 
