@@ -1,11 +1,12 @@
 import sys, os
 import numpy as np
 from joblib import load
+from sklearn import datasets
 
 
 sys.path.append(".")
 
-from utils import get_all_h_param_comb, tune_and_save
+from utils import get_all_h_param_comb, tune_and_save,train_dev_test_split
 from sklearn import svm, metrics
 
 # test case to check if all the combinations of the hyper parameters are indeed getting created
@@ -55,36 +56,36 @@ def test_tune_and_save():
     assert os.path.exists(actual_model_path)
     assert type(load(actual_model_path)) == type(clf)
 
-# what more test cases should be there
-# irrespective of the changes to the refactored code.
-
-# train/dev/test split functionality : input 200 samples, fraction is 70:15:15, then op should have 140:30:30 samples in each set
 
 
-# preprocessing gives ouput that is consumable by model
-
-# accuracy check. if acc(model) < threshold, then must not be pushed.
-
-# hardware requirement test cases are difficult to write.
-# what is possible: (model size in execution) < max_memory_you_support
-
-# latency: tik; model(input); tok == time passed < threshold
-# this is dependent on the execution environment (as close the actual prod/runtime environment)
-
-
-# model variance? --
-# bias vs variance in ML ?
-# std([model(train_1), model(train_2), ..., model(train_k)]) < threshold
-
-
-# Data set we can verify, if it as desired
-# dimensionality of the data --
-
-# Verify output size, say if you want output in certain way
-# assert len(prediction_y) == len(test_y)
-
-# model persistance?
-# train the model -- check perf -- write the model to disk
-# is the model loaded from the disk same as what we had written?
-# assert acc(loaded_model) == expected_acc
-# assert predictions (loaded_model) == expected_prediction
+def test_train_dev_test_split_same():
+    digits = datasets.load_digits()
+    train_frac, dev_frac, test_frac = 0.8, 0.1, 0.1
+    n_samples = len(digits.images)
+    data = digits.images.reshape((n_samples, -1))
+    label = digits.target
+    random=2
+    # housekeeping
+    del digits
+    x_train, y_train, x_dev, y_dev, x_test, y_test=train_dev_test_split(data, label, train_frac, dev_frac,random,False)
+    x_train1, y_train1, x_dev1, y_dev1, x_test1, y_test1=train_dev_test_split(data, label, train_frac, dev_frac,random,False)
+    assert x_train.all()==x_train1.all()and x_dev.all()==x_dev1.all() and  x_test.all()==x_test.all()
+ 
+def test_train_dev_test_split_notsame():
+    digits = datasets.load_digits()
+    train_frac, dev_frac, test_frac = 0.8, 0.1, 0.1
+    n_samples = len(digits.images)
+    data = digits.images.reshape((n_samples, -1))
+    label = digits.target
+    random=1
+    random1=42
+    
+    # housekeeping
+    del digits
+    x_train, y_train, x_dev, y_dev, x_test, y_test=train_dev_test_split(data, label, train_frac, dev_frac,random,True)
+    x_train1, y_train1, x_dev1, y_dev1, x_test1, y_test1=train_dev_test_split(data, label, train_frac, dev_frac,random1,True)
+    
+    print(x_train.all())
+    print(x_train1.all())
+    assert  x_train.all() ==x_train1.all()
+    

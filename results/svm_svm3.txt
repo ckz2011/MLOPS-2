@@ -1,0 +1,58 @@
+Test accuracy SVC(C=0.2, gamma=0.02):
+              precision    recall  f1-score   support
+
+           0       0.00      0.00      0.00        20
+           1       0.00      0.00      0.00        19
+           2       0.00      0.00      0.00        11
+           3       0.00      0.00      0.00        20
+           4       0.00      0.00      0.00        18
+           5       0.00      0.00      0.00        23
+           6       0.08      1.00      0.15        15
+           7       0.00      0.00      0.00        25
+           8       0.00      0.00      0.00        16
+           9       0.00      0.00      0.00        12
+
+    accuracy                           0.08       179
+   macro avg       0.01      0.10      0.02       179
+weighted avg       0.01      0.08      0.01       179
+
+F1 score SVC(C=0.2, gamma=0.02):
+0.015463917525773193model saved at ./models/svmjoblib.joblibTest accuracy SVC(C=0.2, gamma=0.02):
+              precision    recall  f1-score   support
+
+           0       0.00      0.00      0.00        20
+           1       0.00      0.00      0.00        19
+           2       0.00      0.00      0.00        11
+           3       0.00      0.00      0.00        20
+           4       0.00      0.00      0.00        18
+           5       0.00      0.00      0.00        23
+           6       0.08      1.00      0.15        15
+           7       0.00      0.00      0.00        25
+           8       0.00      0.00      0.00        16
+           9       0.00      0.00      0.00        12
+
+    accuracy                           0.08       179
+   macro avg       0.01      0.10      0.02       179
+weighted avg       0.01      0.08      0.01       179
+
+F1 score SVC(C=0.2, gamma=0.02):
+0.015463917525773193model saved at ./models/svmjoblib.joblibTest accuracy SVC(C=0.2, gamma=0.02):
+              precision    recall  f1-score   support
+
+           0       0.00      0.00      0.00        20
+           1       0.00      0.00      0.00        19
+           2       0.00      0.00      0.00        11
+           3       0.00      0.00      0.00        20
+           4       0.00      0.00      0.00        18
+           5       0.00      0.00      0.00        23
+           6       0.08      1.00      0.15        15
+           7       0.00      0.00      0.00        25
+           8       0.00      0.00      0.00        16
+           9       0.00      0.00      0.00        12
+
+    accuracy                           0.08       179
+   macro avg       0.01      0.10      0.02       179
+weighted avg       0.01      0.08      0.01       179
+
+F1 score SVC(C=0.2, gamma=0.02):
+0.015463917525773193model saved at ./models/svmjoblib.joblib

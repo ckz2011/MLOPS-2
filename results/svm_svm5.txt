@@ -1,0 +1,20 @@
+Test accuracy SVC(C=0.2, gamma=0.02):
+              precision    recall  f1-score   support
+
+           0       0.00      0.00      0.00        14
+           1       0.00      0.00      0.00        21
+           2       0.00      0.00      0.00        19
+           3       0.00      0.00      0.00        19
+           4       0.00      0.00      0.00        17
+           5       0.00      0.00      0.00        20
+           6       1.00      0.22      0.36        18
+           7       0.00      0.00      0.00        19
+           8       0.00      0.00      0.00        19
+           9       0.07      1.00      0.14        13
+
+    accuracy                           0.09       179
+   macro avg       0.11      0.12      0.05       179
+weighted avg       0.11      0.09      0.05       179
+
+F1 score SVC(C=0.2, gamma=0.02):
+0.05019342359767891model saved at ./models/svmjoblib.joblib
