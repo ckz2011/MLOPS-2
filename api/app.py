@@ -23,26 +23,28 @@ def hello():
 def upload_file():
     try:
         print("In Upload File")
-        if request.method == 'POST' and 'file1' in request.files and request.files['file1'].filename != '':
+        if request.method == 'POST':
           
-          print(request.files['file1'].filename)
+          print(request)
+          # print(request.files['file1'].filename)
           print(request.files['file2'].filename)
+          # print(request.[''])
 
-          request.files['file1'].save(os.path.join('uploaded_files', request.files['file1'].filename))
+          # request.files['file1'].save(os.path.join('uploaded_files', request.files['file1'].filename))
           request.files['file2'].save(os.path.join('uploaded_files', request.files['file2'].filename))
           
-          img1 = Image.open("uploaded_files/{}".format(request.files['file1'].filename))
+          # img1 = Image.open("uploaded_files/{}".format(request.files['file1'].filename))
           img2 = Image.open("uploaded_files/{}".format(request.files['file2'].filename))
 
           print("Images Fetched")
           
         #   img = img.reshape(8, 8)
         #   img=img.resize((8,8))
-          img1 = img1.resize((8,8))
+          # img1 = img1.resize((8,8))
           img2 = img2.resize((8,8))
           
         #   img = arr.reshape(8, 8)
-          img1 = np.array(img1).reshape((-1, 64))
+          # img1 = np.array(img1).reshape((-1, 64))
           img2 = np.array(img2).reshape((-1, 64))
           
 
