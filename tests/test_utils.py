@@ -6,12 +6,7 @@ from sklearn import datasets
 
 sys.path.append(".")
 
-<<<<<<< HEAD
 from utils import get_all_h_param_comb, tune_and_save,train_dev_test_split
-=======
-# from utils import get_all_h_param_comb, tune_and_save
-import utils
->>>>>>> 64293e6be5add52b82eee063c97610ab356c1bfb
 from sklearn import svm, metrics
 
 # test case to check if all the combinations of the hyper parameters are indeed getting created

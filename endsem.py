@@ -68,7 +68,7 @@ metric = metrics.accuracy_score
 
 
 actual_model_path = tune_and_save(
-    clf, x_train, y_train, x_dev, y_dev, metric, h_param_comb, model_path="./models/svmjoblib_{random}.joblib"
+    clf, x_train, y_train, x_dev, y_dev, metric, h_param_comb, model_path="./models/svmjoblib.joblib"
 )
 
 
