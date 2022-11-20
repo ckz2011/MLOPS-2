@@ -88,3 +88,5 @@ def test_tune_and_save():
 # is the model loaded from the disk same as what we had written?
 # assert acc(loaded_model) == expected_acc
 # assert predictions (loaded_model) == expected_prediction
+def test_equal():
+    assert 1==1
