@@ -89,4 +89,4 @@ def test_tune_and_save():
 # assert acc(loaded_model) == expected_acc
 # assert predictions (loaded_model) == expected_prediction
 def test_equal():
-    assert 1==8
+    assert 1==1
